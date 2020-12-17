@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnEmenies : MonoBehaviour
+public class SpawnEnemies : MonoBehaviour
 {
+    
     public float initialTime;
     public float minTime;
     public float maxTime;
@@ -11,17 +12,19 @@ public class SpawnEmenies : MonoBehaviour
     public List<GameObject> EnemiesList = new List<GameObject>();
 
     float timeControl;
-    // Update is called once per frame
+
     void Update()
     {
-        timeControl += timeControl.deltaTime;
+        timeControl += Time.deltaTime;
 
-        if(timeControl >= initalTime){
+        if(timeControl >= initialTime)
+        {
             Instantiate(EnemiesList[Random.Range(0, EnemiesList.Count)], 
-                transform.position + new Vector3(0, Random.Range(-2,3), 0), transform.rotation);
+                transform.position + new Vector3(0, Random.Range(-2,2), 0), transform.rotation);
 
             initialTime = Random.Range(minTime, maxTime);
             timeControl = 0;
         }
+        
     }
 }
