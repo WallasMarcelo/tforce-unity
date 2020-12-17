@@ -6,30 +6,43 @@ public class Player : MonoBehaviour
 {
     public float Speed;
     public float JumpForce;
+    public GameObject bullet;
+    public Transform firePoint;
+
+    public GameObject smoke;
 
     private bool isJumping;
-    private Rigidbody rig;
-    // Start is called before the first frame update
+    private Rigidbody2D rig;
+
     void Start()
     {
         rig = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        rig.Velocity = new Vector(Speed = Time.delTime, rig.velocity.y);
+        //Logica para movimentacao do player
+        rig.velocity = new Vector2(Speed * Time.deltaTime, rig.velocity.y);
 
-        if(Input.GetKey(KeyCode.Space) && isJumping == false)
+        if(Input.GetKey(KeyCode.Space) && !isJumping)
         {
-            rig.AddForce(Vector2.up * JumpForce, FaceMode2D.Impulse);
-            isJumping == true;
+            rig.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+            isJumping = true;
+            smoke.SetActive(true); // Ativar fumaca do jetpack
+        }
+
+        if(Input.GetKey(KeyCode.Z))
+        {
+            Instantiate(bullet, firePoint.transform.position, firePoint.transform.rotation);
         }
     }
 
     void OnCollisionEnter2D(Collision2D collision) {
-        if(Collision.gameObject.layer == 8){
-            isJumping = true;
+        
+        if(collision.gameObject.tag == "ground")
+        {
+            isJumping = false;
+            smoke.SetActive(false); // Desativar fumaca do jetpack
         }
     }
 }
